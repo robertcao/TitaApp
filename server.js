@@ -36,7 +36,6 @@ require('./app/routes.js')(app, passport);
 var configDB = require('./config/database.js');
 mongoose.connect(configDB.url); // connect to our database
 var db = mongoose.connection;
-console.log(db);
 
 // launch ======================================================================
 app.listen(port);

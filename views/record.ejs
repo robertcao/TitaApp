@@ -1,0 +1,56 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+	<head>
+		<title>Tita Today</title>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+		<style>
+			body 		{ padding-top:30px; word-wrap:break-word; background-color:#BAF5DB; }
+		</style>
+	</head>
+	
+	<body>
+		<nav class="navbar navbar-fixed-top startbootstrap-nav" role="navigation">
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+	          <a class="navbar-brand" href="/">Sample App for TP CmpE272 -- Tita v2.0</a>	 
+	          <ul class="nav navbar-nav navbar-right">
+	            <li><a href="/record">welcome: <%= user.local.email %></a></li>
+	            <li><a href="/mainpage">Add Record</a></li>
+	            <li><a href="/record">View Record</a></li>
+	            <li><a href="/logout">Logout</a></li>
+	          </ul>
+	        </div><!-- /.navbar-collapse -->
+	    </nav>
+	
+		<div class="container">
+			<div class="col-lg-12">
+		       	<h2 class="page-header"><i class="glyphicon glyphicon-play-circle"></i> Great story someday future!</h2>
+		    </div>
+			
+			<form action="/viewRecords" >
+				<div class="col-md-12 col-md-offset-0">
+	            	<table class="table table-bordered table-hover">
+	                	<tbody style="text-align:left;">
+		                	<tr>
+			                	<th>Time </th>
+			                	<th>Content </th>
+			                	<th>Action </th>
+			                </tr>
+			                
+			                <% words.forEach( function ( word ){ %>
+			                <tr>
+			                    <td><%= word.recordDate %></td>                                        
+			                    <td><%= word.recordContent %></td>              
+			                    <td><a href="/mainpage">edit</a>&nbsp; &nbsp;<a href="/record">delete</a></td>
+			                </tr>
+			                <% }); %> 
+		                              
+	               		</tbody>
+	            	</table>
+				</div> 	
+			</form>	
+			
+		</div>
+	</body>
+</html>

@@ -1,25 +1,68 @@
 // app/routes.jss
 
-var User = require('../app/models/user');
+var User  = require('../app/models/user');
+var Words = require('../app/models/word');
 
 var mongoose = require('mongoose');
 
 module.exports = function (app, passport) {
 
     // =====================================
-    // Book Store SECTION =========================
+    // MAIN SECTION ========================
     // =====================================
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
+	// main page to record word
 	app.get('/mainpage', isLoggedIn, function (req, res) {
     	res.render('mainpage.ejs', {
-    		user: req.user
+    		user: req.user,
+    		word: req.word
     	}); // load the mainpage.ejs file
     });
 
+    app.post('/mainpage', isLoggedIn, function (req, res) {
+        var newWord     = new Words();
+        var months 	    = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var time 		= new Date();
+        var curr_date   = time.getDate();
+        var curr_month  = months[time.getMonth()];
+        var curr_year   = time.getFullYear();
+        var curr_hour   = time.getHours();
+        var curr_minite = time.getMinutes();
 
+        // set the word
+        newWord.recordContent  = req.param('words');
+        newWord.recordDate     = curr_date + '-' + curr_month + '-' + curr_year 
+        								   + ' ' 
+        								   + curr_hour + ':' + curr_minite;
+        newWord.recorderEmail  = req.user.local.email;
+        
+        console.log(newWord.recordDate);
+        
+        newWord.save();
+        res.redirect('/record');
+    });
+	
+	
+	
     // =====================================
-    // INDEX PAGE (with login links) ========
+    // WORD SECTION ========================
+    // =====================================
+	app.get('/record', isLoggedIn, function(req, res) {
+		Words.find({"recorderEmail": req.user.local.email}, function (err, user_words) {
+			if (err) {
+			}
+			;
+			res.render('record.ejs', {
+				user: req.user,
+				words: user_words
+			});
+		});
+	});	
+	
+	
+    // =====================================
+    // INDEX PAGE (with login links) =======
     // =====================================
     app.get('/', function (req, res) {
         res.render('index.ejs'); // load the index.ejs file
